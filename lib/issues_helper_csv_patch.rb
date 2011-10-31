@@ -64,7 +64,14 @@ module IssuesHelperCsvPatch
           custom_fields.each {|f| fields << show_value(issue.custom_value_for(f)) }
           fields << issue.description
           latest_journal = issue.journals.reverse.detect {|j| ! j.notes.to_s.empty?}
-          fields << (latest_journal ? latest_journal.notes : "")
+          if latest_journal
+            note_datetime = latest_journal.created_on.strftime("%Y/%m/%d %H:%M")
+            note_user = latest_journal.user.lastname + " " + latest_journal.user.firstname
+            note = latest_journal.notes
+            fields << "(#{note_datetime} #{note_user})\r\n#{note}"
+          else
+            fields << ""
+          end
           csv << fields.collect {|c| begin; ic.iconv(c.to_s); rescue; c.to_s; end }
         end
       end
