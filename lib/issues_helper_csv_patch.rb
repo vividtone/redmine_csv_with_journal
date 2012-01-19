@@ -17,7 +17,7 @@ module IssuesHelperCsvPatch
       export = FCSV.generate(:col_sep => l(:general_csv_separator)) do |csv|
         # csv header fields
         csv << [ "#" ] + columns.collect {|c| Redmine::CodesetUtil.from_utf8(c.caption.to_s, encoding) } +
-          (options[:description] ? [Redmine::CodesetUtil.from_utf8(l(:field_description), encoding)] : [])
+          (options[:description] ? [Redmine::CodesetUtil.from_utf8(l(:field_description), encoding), Redmine::CodesetUtil.from_utf8(l(:field_notes), encoding)] : [])
   
         # csv lines
         issues.each do |issue|
